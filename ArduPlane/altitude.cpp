@@ -55,8 +55,8 @@ void Plane::adjust_altitude_target()
         set_target_altitude_location(temp);
     } else 
 #endif // OFFBOARD_GUIDED == ENABLED
-      if (control_mode->update_target_altitude()) {
-          // handled in mode specific code
+    if (control_mode->update_target_altitude()) {
+            // handled in mode specific code
     } else if (landing.is_flaring()) {
         // during a landing flare, use TECS_LAND_SINK as a target sink
         // rate, and ignores the target altitude
@@ -72,7 +72,40 @@ void Plane::adjust_altitude_target()
        set_target_altitude_location(current_loc);
        reset_offset_altitude();
 #endif
-    } else if (reached_loiter_target()) {
+    } else if (control_mode == &mode_auto) {
+        if (mission.get_current_nav_id() == MAV_CMD_NAV_WAYPOINT) {
+            set_target_altitude_location(next_WP_loc);
+            change_target_altitude((prev_WP_loc.alt - next_WP_loc.alt) * (1.0f - auto_state.wp_proportion));
+            constrain_target_altitude_location(next_WP_loc, prev_WP_loc);
+        } else if (mission.get_current_nav_id() == MAV_CMD_NAV_LOITER_TURNS) {
+            set_target_altitude_location(next_WP_loc);
+            if (condition_value != 0) {
+                if (loiter.total_cd != 0) {
+                    loiter.propo_cd = (float)loiter.sum_cd / (float)loiter.total_cd;
+                    target_altitude.propo_alt = (prev_WP_loc.alt - next_WP_loc.alt) * (1.0f - loiter.propo_cd);
+                    change_target_altitude(target_altitude.propo_alt);
+                } else {
+                    set_target_altitude_location(prev_WP_loc);
+                }
+                constrain_target_altitude_location(next_WP_loc, prev_WP_loc);
+            }
+        } else {
+            if (reached_loiter_target()) {
+                // once we reach a loiter target then lock to the final
+                // altitude target
+                set_target_altitude_location(next_WP_loc);
+            } else if (target_altitude.offset_cm != 0 && !current_loc.past_interval_finish_line(prev_WP_loc, next_WP_loc)) {
+                // control climb/descent rate
+                set_target_altitude_proportion(next_WP_loc, 1.0f - auto_state.wp_proportion);
+
+                // stay within the range of the start and end locations in altitude
+                constrain_target_altitude_location(next_WP_loc, prev_WP_loc);
+            } else {
+                set_target_altitude_location(next_WP_loc);
+            }
+        }
+    }
+    else if (reached_loiter_target()) {
         // once we reach a loiter target then lock to the final
         // altitude target
         set_target_altitude_location(next_WP_loc);
@@ -88,6 +121,7 @@ void Plane::adjust_altitude_target()
     }
 
     altitude_error_cm = calc_altitude_error_cm();
+
 }
 
 /*
