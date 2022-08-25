@@ -598,13 +598,13 @@ void AP_MotorsMatrix::setup_motors(motor_frame_class frame_class, motor_frame_ty
                 }
                 case MOTOR_FRAME_TYPE_X: {
                     _frame_type_string = "X";
-                    static const AP_MotorsMatrix::MotorDef motors[] {
-                        {   45, AP_MOTORS_MATRIX_YAW_FACTOR_CCW,  1 },
-                        { -135, AP_MOTORS_MATRIX_YAW_FACTOR_CCW,  3 },
-                        {  -45, AP_MOTORS_MATRIX_YAW_FACTOR_CW,   4 },
-                        {  135, AP_MOTORS_MATRIX_YAW_FACTOR_CW,   2 },
+                    static const AP_MotorsMatrix::MotorDefRaw motors[]{
+                        { -1.00f,  0.89f, -0.98f, 2, 1.00f },
+                        {  0.23f, -1.00f, -1.00f, 4, 0.98f },
+                        {  1.00f,  0.89f,  0.98f, 1, 1.00f },
+                        { -0.23f, -1.00f,  1.00f, 3, 0.98f },
                     };
-                    add_motors(motors, ARRAY_SIZE(motors));
+                    add_motors_raw(motors, ARRAY_SIZE(motors));
                     break;
                 }
 #if APM_BUILD_TYPE(APM_BUILD_ArduPlane)
