@@ -329,6 +329,15 @@ void AP_L1_Control::update_waypoint(const struct Location &prev_WP, const struct
     _bearing_error = Nu; // bearing error angle (radians), +ve to left of track
 
     _data_is_stale = false; // status are correctly updated with current waypoint data
+
+    //custom, P1_Control
+    P1_Controller.dist_error = _crosstrack_error / groundSpeed;
+    if (P1_Controller.dist_error < 0.5f && P1_Controller.dist_error > -0.5f && Nu < 10.0f && Nu > -10.0f) {
+        P1_Controller.correction = P1_Controller.update_pid(dist_error);
+
+
+        _latAccDem = _latAccDem;
+    }
 }
 
 // update L1 control for loitering
@@ -441,6 +450,15 @@ void AP_L1_Control::update_loiter(const struct Location &center_WP, float radius
     }
 
     _data_is_stale = false; // status are correctly updated with current waypoint data
+
+    //custom, P1_Control
+    P1_Controller.dist_error = _crosstrack_error / groundSpeed;
+    if (P1_Controller.dist_error < 0.5f && P1_Controller.dist_error > -0.5f && Nu < 10.0f && Nu > -10.0f) {
+        P1_Controller.correction = P1_Controller.update_pid(dist_error);
+
+
+        _latAccDem = _latAccDem;
+    }
 }
 
 

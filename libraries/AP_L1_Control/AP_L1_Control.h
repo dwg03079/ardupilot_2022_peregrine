@@ -19,6 +19,7 @@
 #include <AP_Navigation/AP_Navigation.h>
 #include <AP_TECS/AP_TECS.h>
 #include <AP_Common/Location.h>
+#include <AP_L1_P1_Control/AP_L1_P1_Control.h>
 
 class AP_L1_Control : public AP_Navigation {
 public:
@@ -129,4 +130,7 @@ private:
     bool _reverse = false;
     float get_yaw() const;
     int32_t get_yaw_sensor() const;
+
+    //custom, P1_Control
+    AP_L1_P1_Control P1_Controller;
 };
