@@ -8,6 +8,8 @@
 class AP_YawController
 {
 public:
+    friend class Attack;
+
     AP_YawController(const AP_Vehicle::FixedWing &parms);
 
     /* Do not allow copies */

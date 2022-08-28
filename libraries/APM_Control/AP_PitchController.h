@@ -9,6 +9,8 @@
 class AP_PitchController
 {
 public:
+    friend class Attack;
+
     AP_PitchController(const AP_Vehicle::FixedWing &parms);
 
     /* Do not allow copies */

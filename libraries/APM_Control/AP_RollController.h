@@ -9,6 +9,8 @@
 class AP_RollController
 {
 public:
+    friend class Attack;
+
     AP_RollController(const AP_Vehicle::FixedWing &parms);
 
     /* Do not allow copies */

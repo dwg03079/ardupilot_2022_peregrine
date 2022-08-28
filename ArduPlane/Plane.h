@@ -90,6 +90,8 @@
 #include "quadplane.h"
 #include "tuning.h"
 
+#include "Attack.h"
+
 // Configuration
 #include "config.h"
 
@@ -164,6 +166,8 @@ public:
     friend class ModeTakeoff;
     friend class ModeThermal;
     friend class ModeLoiterAltQLand;
+
+    friend class Attack;
 
     Plane(void);
 
@@ -291,6 +295,8 @@ private:
 #if HAL_SOARING_ENABLED
     ModeThermal mode_thermal;
 #endif
+
+    Attack attack;
 
     // This is the state of the flight control system
     // There are multiple states defined such as MANUAL, FBW-A, AUTO
