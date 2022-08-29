@@ -199,7 +199,7 @@ void Plane::Log_Write_Status()
         ,is_crashed  : crash_state.is_crashed
         ,is_still    : AP::ins().is_still()
         ,stage       : static_cast<uint8_t>(flight_stage)
-        ,impact      : nav_controller->reached_loiter_target(),//crash_state.impact_detected
+        ,impact      : crash_state.impact_detected
         };
 
     logger.WriteBlock(&pkt, sizeof(pkt));
