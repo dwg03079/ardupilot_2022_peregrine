@@ -701,6 +701,10 @@ private:
 
         // The amount of time we should stay in a loiter for the Loiter Time command.  Milliseconds.
         uint32_t time_max_ms;
+
+        //custom
+        float propo_cd;
+
     } loiter;
 
     // Conditional command
@@ -754,6 +758,9 @@ private:
 
         // last time we checked for pilot control of height
         uint32_t last_elev_check_us;
+
+        //custom
+        int32_t propo_alt;
     } target_altitude {};
 
     float relative_altitude;
