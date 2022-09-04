@@ -59,6 +59,8 @@ void Plane::set_next_WP(const struct Location &loc)
 
     setup_glide_slope();
     setup_turn_angle();
+
+    plane.TECS_controller.next_wp = next_WP_loc;
 }
 
 void Plane::set_guided_WP(const Location &loc)

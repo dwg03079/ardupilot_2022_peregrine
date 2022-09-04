@@ -96,7 +96,7 @@ const AP_Scheduler::Task Plane::scheduler_tasks[] = {
 #endif // AP_AIRSPEED_AUTOCAL_ENABLE
 
     //custom
-    SCHED_TASK_CLASS(Attack,         &plane.attack, attack_update,   10,    100,  103),
+    SCHED_TASK_CLASS(Attack,         &plane.attack, attack_update,   50,    100,  103),
 
 #if HAL_MOUNT_ENABLED
     SCHED_TASK_CLASS(AP_Mount, &plane.camera_mount, update, 50, 100, 105),

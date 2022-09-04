@@ -26,6 +26,8 @@
 class AP_Landing;
 class AP_TECS {
 public:
+    friend class Attack;
+
     AP_TECS(AP_AHRS &ahrs, const AP_Vehicle::FixedWing &parms, const AP_Landing &landing)
         : _ahrs(ahrs)
         , aparm(parms)
@@ -143,6 +145,10 @@ public:
 
     // this supports the TECS_* user settable parameters
     static const struct AP_Param::GroupInfo var_info[];
+
+    bool attack_hgt_dem = false;
+
+    Location next_wp;
 
 private:
     // Last time update_50Hz was called

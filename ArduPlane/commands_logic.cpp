@@ -196,6 +196,13 @@ bool Plane::start_command(const AP_Mission::Mission_Command& cmd)
                                             cmd.content.do_engine_control.height_delay_cm*0.01f);
         break;
 
+    case MAV_CMD_USER_4:
+        attack.unlock_limit();
+        break;
+    case MAV_CMD_USER_5:
+        attack.lock_limit();
+        break;
+
 #if AP_SCRIPTING_ENABLED
     case MAV_CMD_NAV_SCRIPT_TIME:
         do_nav_script_time(cmd);
@@ -315,6 +322,8 @@ bool Plane::verify_command(const AP_Mission::Mission_Command& cmd)        // Ret
     case MAV_CMD_DO_MOUNT_CONTROL:
     case MAV_CMD_DO_VTOL_TRANSITION:
     case MAV_CMD_DO_ENGINE_CONTROL:
+    case MAV_CMD_USER_4:
+    case MAV_CMD_USER_5:
         return true;
 
     default:
@@ -639,6 +648,11 @@ bool Plane::verify_nav_wp(const AP_Mission::Mission_Command& cmd)
                 prev_WP_loc = current_loc;
             }
         }
+        return false;
+    }
+
+    //custom - Attack
+    if (attack.get_state_wp_ignore()) {
         return false;
     }
 

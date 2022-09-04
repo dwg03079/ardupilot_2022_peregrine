@@ -1214,6 +1214,11 @@ MAV_MISSION_RESULT AP_Mission::mavlink_int_to_mission_cmd(const mavlink_mission_
         cmd.content.gimbal_manager_pitchyaw.gimbal_id = packet.z;
         break;
 
+    case MAV_CMD_USER_4:
+        break;
+    case MAV_CMD_USER_5:
+        break;
+
     default:
         // unrecognised command
         return MAV_MISSION_UNSUPPORTED;
@@ -1699,6 +1704,11 @@ bool AP_Mission::mission_cmd_to_mavlink_int(const AP_Mission::Mission_Command& c
         packet.param4 = cmd.content.gimbal_manager_pitchyaw.yaw_rate_degs;
         packet.x = cmd.content.gimbal_manager_pitchyaw.flags;
         packet.z = cmd.content.gimbal_manager_pitchyaw.gimbal_id;
+        break;
+
+    case MAV_CMD_USER_4:
+        break;
+    case MAV_CMD_USER_5:
         break;
 
     default:
@@ -2427,6 +2437,10 @@ const char *AP_Mission::Mission_Command::type() const
         return "PauseContinue";
     case MAV_CMD_DO_GIMBAL_MANAGER_PITCHYAW:
         return "GimbalPitchYaw";
+    case MAV_CMD_USER_4:
+        return "Attack_unlock_limit";
+    case MAV_CMD_USER_5:
+        return "Safe_Attack_abort";
     default:
 #if CONFIG_HAL_BOARD == HAL_BOARD_SITL
         AP_HAL::panic("Mission command with ID %u has no string", id);

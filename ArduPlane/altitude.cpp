@@ -109,8 +109,7 @@ void Plane::adjust_altitude_target()
                 set_target_altitude_location(next_WP_loc);
             }
         }
-    }
-    else if (reached_loiter_target()) {
+    } else if (reached_loiter_target()) {
         // once we reach a loiter target then lock to the final
         // altitude target
         set_target_altitude_location(next_WP_loc);

@@ -76,6 +76,22 @@ public:
         _reverse = reverse;
     }
 
+    void L1_state_wp_ignore(void) override {
+        state_wp_ignore = true;
+    }
+
+    void L1_state_wp_recover(void) override {
+        state_wp_ignore = false;
+    }
+
+    float get_L1_period() {
+        return _L1_period;
+    }
+
+    void set_L1_period(float L1_period) {
+        _L1_period = L1_period;
+    }
+
 private:
     // reference to the AHRS object
     AP_AHRS &_ahrs;
@@ -129,4 +145,6 @@ private:
     bool _reverse = false;
     float get_yaw() const;
     int32_t get_yaw_sensor() const;
+
+    bool state_wp_ignore = false;
 };

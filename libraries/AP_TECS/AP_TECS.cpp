@@ -4,6 +4,9 @@
 #include <AP_Baro/AP_Baro.h>
 #include <AP_Logger/AP_Logger.h>
 #include <AP_Landing/AP_Landing.h>
+#include <AP_Common/Location.h>
+
+#include <AP_Math/AP_Math.h>
 
 extern const AP_HAL::HAL& hal;
 
@@ -478,6 +481,11 @@ void AP_TECS::_update_height_demand(void)
         _hgt_dem = _hgt_dem_prev - max_sink_rate * 0.1f;
     }
 
+    //custom - attack
+    //if (attack_hgt_dem == true) {
+    //    _hgt_dem = _hgt_dem_prev - max_sink_rate * 0.1f;
+    //}
+
     // Apply first order lag to height demand
     _hgt_dem_adj = 0.05f * _hgt_dem + 0.95f * _hgt_dem_adj_last;
 
@@ -508,8 +516,8 @@ void AP_TECS::_update_height_demand(void)
         _flare_counter = 0;
     }
 
-    // Don't allow height demand to get too far ahead of the vehicles current height
-    // if vehicle is unable to follow the demanded climb or descent
+    //Don't allow height demand to get too far ahead of the vehicles current height
+    //if vehicle is unable to follow the demanded climb or descent
     const bool max_climb_condition = (_pitch_dem_unc > _PITCHmaxf || _thr_clip_status == ThrClipStatus::MAX) &&
                                      !(_flight_stage == AP_Vehicle::FixedWing::FLIGHT_TAKEOFF || _flight_stage == AP_Vehicle::FixedWing::FLIGHT_ABORT_LAND);
     const bool max_descent_condition = _pitch_dem_unc < _PITCHminf || _thr_clip_status == ThrClipStatus::MIN;
@@ -923,12 +931,28 @@ void AP_TECS::_update_pitch(void)
 
     // Rate limit the pitch demand to comply with specified vertical
     // acceleration limit
-    float ptchRateIncr = _DT * _vertAccLim / _TAS_state;
+    //float ptchRateIncr = _DT * _vertAccLim / _TAS_state;
 
-    if ((_pitch_dem - _last_pitch_dem) > ptchRateIncr) {
-        _pitch_dem = _last_pitch_dem + ptchRateIncr;
-    } else if ((_pitch_dem - _last_pitch_dem) < -ptchRateIncr) {
-        _pitch_dem = _last_pitch_dem - ptchRateIncr;
+    //if ((_pitch_dem - _last_pitch_dem) > ptchRateIncr) {
+    //    _pitch_dem = _last_pitch_dem + ptchRateIncr;
+    //} else if ((_pitch_dem - _last_pitch_dem) < -ptchRateIncr) {
+    //    _pitch_dem = _last_pitch_dem - ptchRateIncr;
+    //}
+
+    if (attack_hgt_dem == true) {
+        //_pitch_dem = _PITCHminf * 0.90f;
+        //Location c_loc;
+        //if (_ahrs.get_location(c_loc) == false) {
+        //}
+        //_ahrs.getAOA();
+        //_ahrs.get_pitch();
+        //Vector3f AB = c_loc.get_distance_NED(next_wp);
+        //float h_dist_e = safe_sqrt(AB.x * AB.x + AB.y * AB.y);
+        //float h_dist = h_dist_e;
+        //h_dist = MIN(h_dist, h_dist_e);
+        //float v_dist = AB.z;
+        //_pitch_dem = -atanf(v_dist / h_dist) + _ahrs.getAOA();
+        _pitch_dem = _PITCHminf * 0.90f;
     }
 
     // re-constrain pitch demand
